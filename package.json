@@ -1,5 +1,5 @@
 {
-  "name": "smartcare-adhere-et-ocr",
+  "name": "tb-adhere-ocr",
   "version": "1.0.0",
   "private": true,
   "main": "expo/AppEntry.js",
@@ -9,31 +9,18 @@
     "lint": "tsc --noEmit"
   },
   "dependencies": {
-    "@react-native-community/netinfo": "11.4.1",
-    "expo": "~52.0.49",
+    "expo": "~52.0.0",
     "expo-camera": "~16.0.0",
     "expo-crypto": "~14.0.0",
     "expo-file-system": "~18.0.0",
-    "expo-sqlite": "~15.1.4",
+    "expo-sqlite": "~15.0.0",
+    "@react-native-community/netinfo": "11.4.1",
+    "@react-native-ml-kit/text-recognition": "^1.5.1",
     "react": "18.3.1",
-    "react-native": "0.76.9",
-    "rn-mlkit-ocr": "^0.3.1"
+    "react-native": "0.76.5"
   },
   "devDependencies": {
     "@types/react": "~18.3.12",
     "typescript": "~5.6.3"
-  },
-  "overrides": {
-    "tar": "7.5.21",
-    "postcss": "8.5.23",
-    "@xmldom/xmldom": "0.8.15",
-    "image-size": "2.0.3",
-    "expo-modules-autolinking": "2.0.7",
-    "@expo/config-plugins": "9.0.17",
-    "@expo/prebuild-config": "8.0.3",
-    "@expo/metro-config": "0.19.11",
-    "metro": "0.81.0",
-    "metro-resolver": "0.81.0",
-    "metro-config": "0.81.0"
   }
 }

@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import { CameraView, useCameraPermissions } from 'expo-camera';
 import NetInfo from '@react-native-community/netinfo';
-import MlkitOcr from 'rn-mlkit-ocr';
+import TextRecognition from '@react-native-ml-kit/text-recognition';
 import {
   ExtractedTBRecord,
   parseTBRegisterRow,
@@ -65,7 +65,7 @@ export default function App() {
       if (!photo?.uri) throw new Error('Camera capture returned empty URI');
 
       setTempPhotoUri(photo.uri);
-      const ocrResult = await MlkitOcr.recognizeText(photo.uri);
+      const ocrResult = await TextRecognition.recognize(photo.uri);
       const parsed = parseTBRegisterRow(ocrResult.text || '', FACILITY_CODE);
       setRecord(parsed);
       setEditedByUser(false);

@@ -3,6 +3,7 @@
     "name": "SmartCare Adhere-ET OCR",
     "slug": "smartcare-adhere-et-ocr",
     "version": "1.0.0",
+    "newArchEnabled": false,
     "orientation": "portrait",
     "android": {
       "package": "et.org.easeafrica.smartcare.ocr",
@@ -12,13 +13,6 @@
       ]
     },
     "plugins": [
-      [
-        "rn-mlkit-ocr",
-        {
-          "ocrModels": ["latin"],
-          "ocrUseBundled": true
-        }
-      ],
       [
         "expo-camera",
         {
