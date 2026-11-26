@@ -27,6 +27,11 @@ jobs:
 
       - name: Install dependencies & run TypeScript check
         run: |
+          npm ci
+          npm run lint
+
+      - name: Generate Android native project
+        run: |
           npx expo prebuild --platform android --clean --no-install
           test -f android/gradlew
 
