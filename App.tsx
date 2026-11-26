@@ -23,7 +23,7 @@ import {
   purgeTemporaryPhoto,
 } from './src/services/offlineSyncQueue';
 
-const FACILITY_CODE = 'AA-KK-W08';
+const FACILITY_CODE = process.env.EXPO_PUBLIC_FACILITY_CODE || 'AA-KK-W08';
 
 export default function App() {
   const [permission, requestPermission] = useCameraPermissions();

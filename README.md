@@ -3,7 +3,7 @@
 Offline-first React Native (Expo) mobile module engineered by **EASE AFRICA** (`easeafrica.org.et`) to digitize single rows from Ethiopia's paper **National TB Unit Register**, compute baseline Loss to Follow-Up (LTFU) risk scores, purge raw register images immediately after verification, and automatically sync queued records to your PostgreSQL backend whenever internet connectivity becomes available.
 
 ## Architecture Highlights
-1. **100% On-Device OCR (`rn-mlkit-ocr` with bundled Latin model):** Works in TB clinics with zero internet connectivity.
+1. **100% On-Device OCR (`@react-native-ml-kit/text-recognition` with bundled Latin model):** Works in TB clinics with zero internet connectivity.
 2. **Zero Raw Image Persistence:** Immediately deletes the temporary camera image (`FileSystem.deleteAsync`) the moment the TB focal person taps **Verify, Purge Photo & Queue Sync**.
 3. **Durable Offline Outbox (`expo-sqlite` + `@react-native-community/netinfo`):** Stores verified JSON records in a local SQLite WAL queue with unique `idempotency_key` protection and automatically flushes them to `POST /api/v1/sync/enrollments` as soon as mobile data or Wi-Fi reconnects.
 
