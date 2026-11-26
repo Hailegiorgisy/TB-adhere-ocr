@@ -27,10 +27,6 @@ export async function getDb(): Promise<SQLite.SQLiteDatabase> {
   return dbInstance;
 }
 
-/**
- * Permanently deletes the temporary camera photo file immediately after
- * the TB focal person verifies the extracted fields (Zero Image Retention).
- */
 export async function purgeTemporaryPhoto(photoUri: string | null): Promise<void> {
   if (!photoUri) return;
   try {
@@ -43,10 +39,6 @@ export async function purgeTemporaryPhoto(photoUri: string | null): Promise<void
   }
 }
 
-/**
- * Saves verified structured record to local SQLite outbox (100% offline safe),
- * purges raw photo, and triggers background upload if internet is online.
- */
 export async function enqueueVerifiedEnrollment(
   record: ExtractedTBRecord,
   tempPhotoUri: string | null,
@@ -78,10 +70,6 @@ export async function enqueueVerifiedEnrollment(
   return { syncedImmediately, queueCount: counts.pending };
 }
 
-/**
- * Replays all PENDING records to the FastAPI / PostgreSQL server when internet is available.
- * Safe against duplicate uploads via idempotency_key.
- */
 export async function flushOutboxToServer(): Promise<{ uploaded: number; failed: number }> {
   const db = await getDb();
   const pendingRows = await db.getAllAsync<{

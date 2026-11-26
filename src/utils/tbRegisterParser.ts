@@ -32,10 +32,6 @@ export function isValidEthiopianPhone(phone: string): boolean {
   return /^\+251(9|7)\d{8}$/.test(phone);
 }
 
-/**
- * Parses raw on-device OCR text blocks from a single horizontal row
- * of the Ethiopian National TB Unit Register into structured clinical fields.
- */
 export function parseTBRegisterRow(
   rawText: string,
   hcCode: string,
@@ -48,12 +44,10 @@ export function parseTBRegisterRow(
 
   const lowConfidenceFields: string[] = [];
 
-  // 1. Extract TB Register Number (e.g., 042/26, AA-042/26, or 104/19)
   const regMatch = cleaned.match(/\b(?:[A-Z]{2}-)?\d{2,4}\/\d{2,4}\b/i);
   const tbRegisterNo = regMatch ? regMatch[0].toUpperCase() : '';
   if (!tbRegisterNo) lowConfidenceFields.push('tbRegisterNo');
 
-  // 2. Extract Sex (M/F) & Age (0-110)
   let sex: 'M' | 'F' | '' = '';
   const sexMatch = cleaned.match(/\b(M|F|MALE|FEMALE)\b/i);
   if (sexMatch) {
@@ -70,7 +64,6 @@ export function parseTBRegisterRow(
   }
   if (age === null) lowConfidenceFields.push('age');
 
-  // 3. Extract TB Classification (PTB+, PTB-, EPTB, DR-TB)
   let tbType: ExtractedTBRecord['tbType'] = '';
   if (/DR[-\s]?TB|MDR/i.test(cleaned)) tbType = 'DR_TB';
   else if (/EPTB|EP\b/i.test(cleaned)) tbType = 'EPTB';
@@ -78,20 +71,17 @@ export function parseTBRegisterRow(
   else if (/PTB\s*-|P\/NEG|NEG\b/i.test(cleaned)) tbType = 'PTB_NEG';
   if (!tbType) lowConfidenceFields.push('tbType');
 
-  // 4. Extract HIV Status (POS / NEG / UNKNOWN)
   let hivStatus: ExtractedTBRecord['hivStatus'] = 'UNKNOWN';
   if (/HIV\s*\+|HIV\s*POS|\bR\b/i.test(cleaned)) hivStatus = 'POS';
   else if (/HIV\s*-|HIV\s*NEG|\bNR\b/i.test(cleaned)) hivStatus = 'NEG';
   else lowConfidenceFields.push('hivStatus');
 
-  // 5. Extract Ethiopian Phone Numbers (1st = Patient, 2nd = Treatment Supporter)
   const phoneMatches = cleaned.match(/(?:\+?251|0)?[97]\d[\s-]?\d{3}[\s-]?\d{4}/g) || [];
   const patientPhone = phoneMatches[0] ? normalizeEthiopianPhone(phoneMatches[0]) : '';
   const supporterPhone = phoneMatches[1] ? normalizeEthiopianPhone(phoneMatches[1]) : '';
   if (!isValidEthiopianPhone(patientPhone)) lowConfidenceFields.push('patientPhone');
   if (!isValidEthiopianPhone(supporterPhone)) lowConfidenceFields.push('supporterPhone');
 
-  // 6. Extract Ketena / Kebele (e.g., K-03 or Ketena 08)
   const ketenaMatch = cleaned.match(/(?:KETENA|K)[-\s]?(\d{1,2})/i);
   const ketena = ketenaMatch ? `Ketena ${ketenaMatch[1].padStart(2, '0')}` : 'Ketena 01';
 
@@ -130,9 +120,6 @@ export function parseTBRegisterRow(
   };
 }
 
-/**
- * Embedded baseline LTFU Risk Stratification Model (>0.20 = HIGH RISK)
- */
 export function computeLtfuRiskScore(params: {
   age: number;
   sex: string;
@@ -140,11 +127,11 @@ export function computeLtfuRiskScore(params: {
   hivStatus: string;
   hasSupporterPhone: boolean;
 }): { score: number; tier: 'HIGH' | 'STANDARD' } {
-  let logit = -1.85; // Baseline ~13.6%
+  let logit = -1.85;
   if (params.hivStatus === 'POS') logit += 0.85;
   if (params.tbType === 'DR_TB') logit += 1.15;
   if (params.tbType === 'EPTB') logit += 0.25;
-  if (params.age >= 18 && params.age <= 35 && params.sex === 'M') logit += 0.42; // Mobile urban daily worker risk
+  if (params.age >= 18 && params.age <= 35 && params.sex === 'M') logit += 0.42;
   if (!params.hasSupporterPhone) logit += 0.65;
 
   const prob = 1 / (1 + Math.exp(-logit));

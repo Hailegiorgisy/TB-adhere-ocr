@@ -1,29 +1,29 @@
 {
-  "name": "smartcare-adhere-et-ocr",
+  "name": "tb-adhere-ocr",
   "version": "1.0.0",
   "private": true,
-  "main": "expo/AppEntry.js",
+  "main": "index.js",
   "scripts": {
     "start": "expo start",
     "android": "expo run:android",
     "lint": "tsc --noEmit"
   },
   "dependencies": {
-    "expo": "~52.0.0",
-    "expo-camera": "~16.0.0",
-    "expo-crypto": "~14.0.0",
-    "expo-file-system": "~18.0.0",
-    "expo-sqlite": "~15.0.0",
+    "expo": "~52.0.38",
+    "expo-asset": "~11.0.4",
+    "expo-camera": "~16.0.18",
+    "expo-constants": "~17.0.8",
+    "expo-file-system": "~18.0.12",
+    "expo-font": "~13.0.4",
+    "expo-sqlite": "~15.1.4",
     "@react-native-community/netinfo": "11.4.1",
     "@react-native-ml-kit/text-recognition": "^1.5.1",
     "react": "18.3.1",
-    "react-native": "0.76.5"
+    "react-native": "0.76.7"
   },
   "devDependencies": {
+    "@babel/core": "^7.25.2",
     "@types/react": "~18.3.12",
     "typescript": "~5.6.3"
-  },
-  "overrides": {
-    "tar": "6.2.1"
   }
 }

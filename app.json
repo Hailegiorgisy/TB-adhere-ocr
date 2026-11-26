@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "SmartCare Adhere-ET OCR",
-    "slug": "smartcare-adhere-et-ocr",
+    "slug": "tb-adhere-ocr",
     "version": "1.0.0",
     "newArchEnabled": false,
     "orientation": "portrait",
@@ -18,7 +18,8 @@
         {
           "cameraPermission": "Allow SmartCare Adhere-ET to capture single rows from the paper TB Unit Register for offline OCR digitization."
         }
-      ]
+      ],
+      "expo-sqlite"
     ]
   }
 }

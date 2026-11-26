@@ -1,4 +1,4 @@
-name: Build Android APK
+name: Build Android APK & Typecheck
 
 on:
   push:
@@ -23,24 +23,47 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Install dependencies and align Expo SDK packages
+      - name: Install dependencies & run TypeScript check
         run: |
           npm install
-          npx expo install --fix
+          npm run lint
 
-      - name: Generate native Android project (Prebuild)
+      - name: Generate clean Expo bare-minimum native Android project
         env:
           CI: '1'
         run: |
-          npx expo prebuild --platform android --clean --no-install
-          ls -la android/gradlew
+          npx --yes create-expo-app@latest /tmp/bare-scaffold --template bare-minimum --no-install
+          cp -r /tmp/bare-scaffold/android ./android
+          rm -rf /tmp/bare-scaffold
 
-      - name: Grant execute permission to gradlew
-        run: chmod +x android/gradlew
+      - name: Configure Android package name, permissions & disable New Arch
+        run: |
+          sed -i 's/com.anonymous.barescaﬀold/et.org.easeafrica.smartcare.ocr/g' android/app/build.gradle || true
+          sed -i 's/com.anonymous.barescaﬀold/et.org.easeafrica.smartcare.ocr/g' android/app/src/main/AndroidManifest.xml || true
+          sed -i 's/newArchEnabled=true/newArchEnabled=false/g' android/gradle.properties || true
+          node -e '
+            const fs = require("fs");
+            for (const p of ["android/app/build.gradle", "android/app/src/main/AndroidManifest.xml"]) {
+              if (fs.existsSync(p)) {
+                let s = fs.readFileSync(p, "utf8");
+                s = s.replace(/com\.anonymous\.[a-zA-Z0-9_]+/g, "et.org.easeafrica.smartcare.ocr");
+                fs.writeFileSync(p, s);
+              }
+            }
+            const manifestPath = "android/app/src/main/AndroidManifest.xml";
+            let m = fs.readFileSync(manifestPath, "utf8");
+            if (!m.includes("android.permission.CAMERA")) {
+              m = m.replace("<uses-permission android:name=\"android.permission.INTERNET\"/>",
+                "<uses-permission android:name=\"android.permission.INTERNET\"/>\n    <uses-permission android:name=\"android.permission.CAMERA\"/>\n    <uses-permission android:name=\"android.permission.ACCESS_NETWORK_STATE\"/>");
+              fs.writeFileSync(manifestPath, m);
+            }
+          '
 
       - name: Build Release APK
         working-directory: android
-        run: ./gradlew assembleRelease --no-daemon
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleRelease --no-daemon
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4

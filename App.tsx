@@ -23,7 +23,7 @@ import {
   purgeTemporaryPhoto,
 } from './src/services/offlineSyncQueue';
 
-const FACILITY_CODE = 'AA-KK-W08'; // Kolfe Keranio Woreda 08 Health Center
+const FACILITY_CODE = 'AA-KK-W08';
 
 export default function App() {
   const [permission, requestPermission] = useCameraPermissions();
@@ -116,7 +116,6 @@ export default function App() {
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* Top Status Header */}
       <View style={styles.header}>
         <View>
           <Text style={styles.brand}>SMARTCARE ADHERE-ET • OCR</Text>
@@ -127,7 +126,6 @@ export default function App() {
         </View>
       </View>
 
-      {/* Sync Queue Banner */}
       <View style={styles.syncBar}>
         <Text style={styles.syncText}>
           Pending Upload: <Text style={styles.bold}>{queueCounts.pending}</Text>  |  Synced to DB:{' '}
