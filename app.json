@@ -1,0 +1,30 @@
+{
+  "expo": {
+    "name": "SmartCare Adhere-ET OCR",
+    "slug": "smartcare-adhere-et-ocr",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "android": {
+      "package": "et.org.easeafrica.smartcare.ocr",
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.ACCESS_NETWORK_STATE"
+      ]
+    },
+    "plugins": [
+      [
+        "rn-mlkit-ocr",
+        {
+          "ocrModels": ["latin"],
+          "ocrUseBundled": true
+        }
+      ],
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow SmartCare Adhere-ET to capture single rows from the paper TB Unit Register for offline OCR digitization."
+        }
+      ]
+    ]
+  }
+}
