@@ -24,17 +24,18 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Install dependencies and base native template
+      - name: Install dependencies and download SDK 52 native template tarball
         run: |
           npm install
           npx expo install --fix
-          npm install --no-save expo-template-bare-minimum
+          npm pack expo-template-bare-minimum@52
 
       - name: Generate native Android project (Prebuild)
         env:
           CI: '1'
         run: |
-          npx expo prebuild --platform android --clean --no-install --template ./node_modules/expo-template-bare-minimum
+          TEMPLATE_TGZ=$(ls expo-template-bare-minimum-*.tgz | head -n 1)
+          npx expo prebuild --platform android --clean --no-install --template "./$TEMPLATE_TGZ"
           ls -la android/gradlew
 
       - name: Grant execute permission to gradlew
