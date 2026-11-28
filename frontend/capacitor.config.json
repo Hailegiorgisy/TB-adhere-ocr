@@ -1,0 +1,6 @@
+{
+  "appId": "com.bonoaddis.pos",
+  "appName": "ቦኖ አዲስ",
+  "webDir": "dist",
+  "bundledWebRuntime": false
+}
